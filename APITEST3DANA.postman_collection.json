@@ -1,0 +1,587 @@
+{
+	"info": {
+		"_postman_id": "8a97a0a7-da41-4a44-afe1-e7bdbb7c8cdf",
+		"name": "APITEST3DANA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16456579"
+	},
+	"item": [
+		{
+			"name": "Positive cases",
+			"item": [
+				{
+					"name": "Get status api",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const $ = cheerio.load(pm.response.text());\r",
+									"console.log($.html());\r",
+									"\r",
+									"pm.test(\"Message is:\" + \" \" + pm.response.text(),() => {\r",
+									"  pm.expect(pm.response.text()).to.include(\"Hello World!\");\r",
+									"});\r",
+									"\r",
+									"postman.setNextRequest(\"Registration\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accestoken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{adress}}/",
+							"host": [
+								"{{adress}}"
+							],
+							"path": [
+								""
+							],
+							"query": [
+								{
+									"key": "active",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registration",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"postman.setNextRequest(\"List of users - 6 users\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"password\",\r\n    \"email\": \"email\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{adress}}/sign-in",
+							"host": [
+								"{{adress}}"
+							],
+							"path": [
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List of users - 6 users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Number of users = ' + pm.response.json().length, function () {\r",
+									"    pm.expect(pm.response.json().length).to.equal(6);\r",
+									"});\r",
+									"\r",
+									"postman.setNextRequest(\"Get single user\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accestoken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{adress}}/users",
+							"host": [
+								"{{adress}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "active",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"User is active\", () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"\r",
+									"pm.expect(responseJson.active).to.eql(true)\r",
+									"})\r",
+									"\r",
+									"postman.setNextRequest(\"Get single user randomly\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accestoken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{adress}}/users/:userId",
+							"host": [
+								"{{adress}}"
+							],
+							"path": [
+								"users",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{userID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get single user randomly",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"User is active\", () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"\r",
+									"pm.expect(responseJson.active).to.eql(true)\r",
+									"\r",
+									"});\r",
+									"\r",
+									"postman.setNextRequest(\"Get user accounts - active user\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const userId = Math.floor((Math.random()*6));\r",
+									"pm.globals.set(\"userId\", userId);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accestoken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"user_Id\": {{userId}},\r\n}"
+						},
+						"url": {
+							"raw": "{{adress}}/users/:userId",
+							"host": [
+								"{{adress}}"
+							],
+							"path": [
+								"users",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user accounts - active user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accestoken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{adress}}/users/:userId/accounts?account_id=",
+							"host": [
+								"{{adress}}"
+							],
+							"path": [
+								"users",
+								":userId",
+								"accounts"
+							],
+							"query": [
+								{
+									"key": "account_id",
+									"value": ""
+								}
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Negative cases",
+			"item": [
+				{
+					"name": "Get single user - inactive",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const responseJson = pm.response.json();\r",
+									"pm.test(responseJson.message,() => {\r",
+									"  pm.expect(responseJson.error).to.eql(true);\r",
+									"  \r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accestoken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{adress}}/users/:userId",
+							"host": [
+								"{{adress}}"
+							],
+							"path": [
+								"users",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user accounts - Time lords",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const responseJson = pm.response.json();\r",
+									"pm.test(responseJson.message,() => {\r",
+									"  pm.expect(responseJson.error).to.eql(true);\r",
+									"  \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const userId =( 5 + Math.floor((Math.random()*2)));\r",
+									"pm.globals.set(\"userId\", userId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accestoken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"user_Id\": {{userId}},\r\n}"
+						},
+						"url": {
+							"raw": "{{adress}}/users/:userId/accounts?account_id=",
+							"host": [
+								"{{adress}}"
+							],
+							"path": [
+								"users",
+								":userId",
+								"accounts"
+							],
+							"query": [
+								{
+									"key": "account_id",
+									"value": ""
+								}
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "adress",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"key": "accestoken",
+			"value": "",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "userID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "accountID",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
